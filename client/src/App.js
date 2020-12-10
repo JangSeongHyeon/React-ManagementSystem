@@ -1,4 +1,5 @@
 import Customer from './components/Customer';
+import CustomerAdd from './components/CustomerAdd';
 import './App.css';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
@@ -28,18 +29,32 @@ const styles=theme=>({
 
 class App extends Component{
 
-  state={
-    customers:"",
-    completed:0
+  constructor(props){
+    super(props);
+    this.state={
+      customers:'',
+      completed:0
+    }
   }
 
+  stateRefresh=()=>{
+    this.setState({
+      customers:'',
+      completed:0
+    });
+
+    // 고객 데이터를 불러옴
+    this.callApi()
+    .then(res=>this.setState({customers:res}))
+    .catch(err=>console.log(err));
+  }
+
+  //로딩관련 함수를 주기적으로 갱신하기 위한 함수
   componentDidMount(){
     this.timer=setInterval(this.progress,20);
     //0.02초마다 한번씩 progress 함수를 호출 해줌
     
-    this.callApi()
-    .then(res=>this.setState({customers:res}))
-    .catch(err=>console.log(err));
+    
   }
 
   callApi=async()=>{
@@ -48,6 +63,7 @@ class App extends Component{
     return body;
   }
 
+  // 페이지로딩관련 함수
   progress=()=>{
     const {completed}=this.state;
     this.setState({completed:completed >=100 ? 0: completed+1})
@@ -56,7 +72,8 @@ class App extends Component{
   render(){
     const {classes}=this.props;
     return (
-      <Paper className={classes.root}>
+      <div>
+        <Paper className={classes.root}>
         <Table className={classes.table}>
           <TableHead>
             <TableRow>
@@ -80,6 +97,9 @@ class App extends Component{
           </TableBody>
         </Table>
       </Paper>  
+      
+        <CustomerAdd stateRefresh={this.stateRefresh} />
+      </div>
     );
   }
 }
