@@ -40,7 +40,7 @@ const upload=multer({dest:'./upload'});
 app.get('/api/customers',(req,res)=>{
     //CUSTOMER 테이블의 데이터를 가져옴
     connection.query(
-      "SELECT*FROM CUSTOMER",
+      "SELECT*FROM  CUSTOMER WHERE isDeleted=0",
 
       //가져온 데이터는 rows 변수에 담겨 처리함
       (err,rows,fields)=>{
@@ -56,7 +56,7 @@ app.use('/image',express.static('./upload'));
 
 //post방식으로 사용자가 고객추가 데이터를 전송했을 때 이를 처리
 app.post('/api/customers',upload.single('image'),(req,res)=>{
-  let sql='INSERT INTO CUSTOMER VALUES (null,?,?,?,?,?)';
+  let sql='INSERT INTO CUSTOMER VALUES (null,?,?,?,?,?,now(),0)';
 
   let image='http://localhost:5000/image/'+req.file.filename
   //사용자는 image경로에 있는 해당 파일로 접근하게 됨
@@ -77,5 +77,16 @@ app.post('/api/customers',upload.single('image'),(req,res)=>{
       res.send(rows);
     })
 });
+
+//delete 작업을 하는 서버 모듈을 추가
+app.delete('/api/customers/:id',(req,res)=>{
+  let sql='UPDATE CUSTOMER SET isDeleted=1 WHERE id=?';
+  let params=[req.params.id];
+  connection.query(sql,params,
+    (err,rows,fields)=>{
+      res.send(rows);
+    })
+});
+
 
 app.listen(port,()=>console.log(`Listening on port ${port}`));

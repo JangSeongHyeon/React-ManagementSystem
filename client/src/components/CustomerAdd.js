@@ -42,7 +42,7 @@ class CustomerAdd extends React.Component{
         })
         
 
-        window.location.reload();
+        // window.location.reload();
     }
 
 
