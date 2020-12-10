@@ -47,17 +47,16 @@ class CustomerAdd extends React.Component{
             .then((response)=>{
                 console.log(response.data);
                 this.props.stateRefresh();
+                this.setState({
+                    file:null,
+                    userName:'',
+                    birthday:'',
+                    gender:'',
+                    job:'',
+                    fileName:'',
+                    open:'false'
+                })
             })
-        
-        this.setState({
-            file:null,
-            userName:'',
-            birthday:'',
-            gender:'',
-            job:'',
-            fileName:'',
-            open:'false'
-        })
         
 
         // window.location.reload();
@@ -110,14 +109,14 @@ class CustomerAdd extends React.Component{
     }
 
 
-    // 고객추가하기 함수
+    // 고객추가 모달창 띄우기 함수
     handleClickOpen=()=>{
         this.setState({
             open:true
         });
     }
 
-    //고객모달 닫기 함수
+    // 고객추가 모달창 닫기 함수
     handleClose=()=>{
         this.setState({
             file:null,

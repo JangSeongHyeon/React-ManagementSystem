@@ -16,14 +16,14 @@ class CustomerDelete extends React.Component{
         }
     }
 
-    // 고객추가하기 함수
+    // 모달창 열기 함수
     handleClickOpen=()=>{
         this.setState({
             open:true
         });
     }
 
-    //고객모달 닫기 함수
+    //모달 닫기 함수
     handleClose=()=>{
         this.setState({
             open:false
