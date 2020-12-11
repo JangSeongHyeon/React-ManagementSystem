@@ -186,7 +186,7 @@ class App extends Component{
           <TableHead>
             <TableRow>
               {cellList.map(c=>{
-                return <TableCell className={classes.tableHead}>{c}</TableCell>
+                return <TableCell className={classes.tableHead} key={c}>{c}</TableCell>
               })}
             </TableRow>
           </TableHead>

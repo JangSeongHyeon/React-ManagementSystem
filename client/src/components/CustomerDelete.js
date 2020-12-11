@@ -50,7 +50,7 @@ class CustomerDelete extends React.Component{
                     <DialogTitle onClose={this.handleClose}>삭제경고</DialogTitle>
                     <DialogContent gutterBottom>
                         <Typography>
-                            선택한 고객정보가 삭제됩니다.
+                            선택한 고객정보를 삭제하시겠습니까?
                         </Typography>
                     </DialogContent>
                     <DialogActions>
