@@ -54,7 +54,7 @@ class CustomerAdd extends React.Component{
                     gender:'',
                     job:'',
                     fileName:'',
-                    open:'false'
+                    open:false
                 })
                 this.handleClose();
             })
@@ -87,7 +87,7 @@ class CustomerAdd extends React.Component{
 
     // 추가할 데이터를 서버로 보내는 함수
     addCustomer=()=>{
-        const url='/api/customers';
+        const url='/api/customers/';
 
         //formData를 이용해 데이터를 서버에 객체로 보냄
         const formData=new FormData();

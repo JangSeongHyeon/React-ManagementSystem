@@ -4,8 +4,9 @@ const bodyParser=require('body-parser');
 const app=express();
 const port=process.env.PORT || 5000;
 
-app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
+app.use(bodyParser.json());
+
 
 //database.json 파일 안의 내용을 data변수에 저장
 const data=fs.readFileSync('./database.json');
@@ -38,6 +39,7 @@ const upload=multer({dest:'./upload'});
 
 //사용자가 /api/customers의 경로로 접속 한 경우 처리
 app.get('/api/customers',(req,res)=>{
+    console.log('추가요청 확인');
     //CUSTOMER 테이블의 데이터를 가져옴
     connection.query(
       "SELECT*FROM  CUSTOMER WHERE isDeleted=0",
@@ -82,6 +84,28 @@ app.post('/api/customers',upload.single('image'),(req,res)=>{
 app.delete('/api/customers/:id',(req,res)=>{
   let sql='UPDATE CUSTOMER SET isDeleted=1 WHERE id=?';
   let params=[req.params.id];
+  connection.query(sql,params,
+    (err,rows,fields)=>{
+      res.send(rows);
+    })
+ });
+
+// update 작업을 하는 서버 모듈을 추가
+app.post('/api/customers/edit/:id',(req,res)=>{
+  console.log(req.body);
+  console.log('노무현');
+
+
+  let sql='UPDATE CUSTOMER SET name=?, birthday=?, gender=?, job=? WHERE id=?'
+
+  let name=req.body.name;
+  let birthday=req.body.birthday;
+  let gender=req.body.gender;
+  let job=req.body.job;
+
+  let params=[name,birthday,gender,job];
+
+  //insert의 ????부분에 데이터를 바인딩 해서 넣음
   connection.query(sql,params,
     (err,rows,fields)=>{
       res.send(rows);
