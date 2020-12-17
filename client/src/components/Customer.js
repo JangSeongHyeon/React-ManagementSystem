@@ -17,7 +17,7 @@ class Customer extends React.Component{
                 <TableCell>{this.props.job}</TableCell>
                 <TableCell>
                     <CustomerDelete stateRefresh={this.props.stateRefresh} id={this.props.id}/>
-                    <CustomerEdit stateRefresh={this.props.stateRefresh} id={this.props.id} name={this.props.name} birthday={this.props.birthday} gender={this.props.gender} job={this.props.job}/>
+                    <CustomerEdit stateRefresh={this.props.stateRefresh} id={this.props.id} name={this.props.name} birthday={this.props.birthday} gender={this.props.gender} job={this.props.job} image={this.props.image}/>
                 </TableCell>
             </TableRow>
         )

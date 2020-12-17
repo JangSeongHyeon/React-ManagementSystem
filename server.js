@@ -91,19 +91,18 @@ app.delete('/api/customers/:id',(req,res)=>{
  });
 
 // update 작업을 하는 서버 모듈을 추가
-app.post('/api/customers/edit/:id',(req,res)=>{
-  console.log(req.body);
-  console.log('노무현');
+app.post('/api/customers/edit/:id',upload.single('image'),(req,res)=>{
 
+  let image='http://localhost:5000/image/'+req.file.filename
 
-  let sql='UPDATE CUSTOMER SET name=?, birthday=?, gender=?, job=? WHERE id=?'
+  let sql='UPDATE CUSTOMER SET image=?, name=?, birthday=?, gender=?, job=? WHERE id=?'
 
   let name=req.body.name;
   let birthday=req.body.birthday;
   let gender=req.body.gender;
   let job=req.body.job;
 
-  let params=[name,birthday,gender,job];
+  let params=[image,name,birthday,gender,job,req.params.id];
 
   //insert의 ????부분에 데이터를 바인딩 해서 넣음
   connection.query(sql,params,

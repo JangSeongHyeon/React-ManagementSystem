@@ -1,13 +1,19 @@
 import React from 'react';
-import Axios from 'axios';
+import {post} from 'axios';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
+import { withStyles } from '@material-ui/core/styles';
 
 
+const styles=theme=>({
+    hidden:{
+        display:'none'
+    }
+});
 
 class CustomerEdit extends React.Component{
 
@@ -23,13 +29,27 @@ class CustomerEdit extends React.Component{
     constructor(props){
         super(props);
         this.state={
+            file:null,
             userName:this.props.name,
             birthday:this.props.birthday,
             gender:this.props.gender,
             job:this.props.job,
-            open:false
+            open:false,
+            image:this.props.image,
+            fileName:'',
         }
     }
+
+
+    // 파일 첨부 함수
+    handleFileChange=(e)=>{
+        this.setState({
+            //여러가지 파일 중에서 0 인덱스의 파일을 선택해서 올림
+            file:e.target.files[0],
+            fileName:e.target.value
+        })
+    }
+
 
     // 모달창 열기 함수
     handleClickOpen=()=>{
@@ -82,31 +102,42 @@ class CustomerEdit extends React.Component{
         const url='/api/customers/edit/'+id;
         
         const formData=new FormData();
+        formData.append('image',this.state.file);
         formData.append('name',this.state.userName);
         formData.append('birthday',this.state.birthday);
         formData.append('gender',this.state.gender);
         formData.append('job',this.state.job);
-        formData.append('_method','patch');
         
         const config={
             headers:{
-                'content-type':'application/json'
+                'content-type':'multipart/form-data'
             }
         }
 
-        return Axios.post(url,formData,config);
+        return post(url,formData,config);
 
         
         
     }
     
     render(){
+        //디자인을 입히기 위해 class변수 초기화
+        const {classes}=this.props;
         return(
             <div>
                 <Button variant="contained" color="secondary" onClick={this.handleClickOpen}>수정</Button>
                 <Dialog open={this.state.open} onClose={this.handleClose}>
                     <DialogTitle>수정창</DialogTitle>
+
                     <DialogContent>
+                        
+                        <input className={classes.hidden} accept="image/*" id="raised-button-file" type="file" file={this.state.file} value={this.state.fileName} onChange={this.handleFileChange} />
+                        <label htmlFor="raised-button-file">
+                            <Button variant="contained" color="primary" component="span" name="file">
+                                {this.state.fileName ==="" ? "프로필 이미지 선택":this.state.fileName}
+                            </Button>
+                        </label>
+                        <br />
                         <TextField label="이름" type="text" name="userName" value={this.state.userName} onChange={this.handleValueChange} /><br />
                         <TextField label="생년월일" type="text" name="birthday" value={this.state.birthday} onChange={this.handleValueChange} /><br />
                         <TextField label="성별" type="text" name="gender" value={this.state.gender} onChange={this.handleValueChange}  /><br />
@@ -122,4 +153,4 @@ class CustomerEdit extends React.Component{
     }
 }
 
-export default CustomerEdit;
+export default withStyles(styles)(CustomerEdit);
